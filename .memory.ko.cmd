@@ -1,1 +1,1 @@
-cmd_/home/zezeon/Programming/module/memory.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/zezeon/Programming/module/memory.ko /home/zezeon/Programming/module/memory.o /home/zezeon/Programming/module/memory.mod.o
+cmd_/home/zeta/Programming/module/memory.ko := ld -r -m elf_x86_64 -z max-page-size=0x200000 -T ./scripts/module-common.lds --build-id  -o /home/zeta/Programming/module/memory.ko /home/zeta/Programming/module/memory.o /home/zeta/Programming/module/memory.mod.o ;  true

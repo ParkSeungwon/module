@@ -7,7 +7,9 @@
 #include<linux/types.h>
 #include<linux/proc_fs.h>
 #include<linux/fcntl.h>
-#include<asm/uaccess.h>
+#include<linux/sched.h>
+//#include<asm/current.h>
+#include<linux/uaccess.h>
 
 int memory_major = 60;// driver main number
 //mknod /dev/memory c 60 0
@@ -26,7 +28,7 @@ ssize_t read(struct file *fp, char* buf, size_t count, loff_t* f_pos) {
 	copy_to_user(buf, hello + i++, 1);
 	return 1;
 }
-ssize_t write(struct file *fp, char* buf, size_t count, loff_t *f_pos) {
+ssize_t write(struct file *fp, const char* buf, size_t count, loff_t *f_pos) {
 	return 1;
 }
 
