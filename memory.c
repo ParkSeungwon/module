@@ -26,6 +26,7 @@ ssize_t read(struct file *fp, char* buf, size_t count, loff_t* f_pos) {
 	static int i = 0;
 	if(hello[i] == '\0') return i = 0;
 	copy_to_user(buf, hello + i++, 1);
+	printk("Current process is %s, pid is %d\n", current->comm, current->pid);
 	return 1;
 }
 ssize_t write(struct file *fp, const char* buf, size_t count, loff_t *f_pos) {
