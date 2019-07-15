@@ -14,7 +14,7 @@
 
 int memory_major = 60;// driver main number
 //mknod /dev/memory c 60 0
-char hello[] = "Hello World\n";
+char hello[100] = "Hello World!\n";
 
 int open(struct inode* inode, struct file* fp) {
 	return 0;
@@ -22,6 +22,7 @@ int open(struct inode* inode, struct file* fp) {
 int close(struct inode* inode, struct file* fp) {
 	return 0;
 }
+
 
 ssize_t read(struct file *fp, char* buf, size_t count, loff_t* f_pos) {
 	static int i = 0;
@@ -43,12 +44,17 @@ struct file_operations memory_fops = {
 
 static dev_t d;
 struct cdev my_cdev;
+struct class *eep_class;
 int init_module()
 {
 	cdev_init(&my_cdev, &memory_fops);
+	my_cdev.owner = THIS_MODULE;
 	alloc_chrdev_region(&d, 0, 1, "memory");
-	printk("major is %d, minor is %d", MAJOR(d), MINOR(d));
+	eep_class = class_create(THIS_MODULE, "eep_class");
+	printk("major is %d, minor is %d\n", MAJOR(d), MINOR(d));
 	cdev_add(&my_cdev, d, 1);
+	device_create(eep_class, NULL, d, NULL, "memory", 0);
+//	snprintf(hello, 100, "major is %d, minor is %d\n\0", MAJOR(d), MINOR(d));
 	return 0;
 }
 
