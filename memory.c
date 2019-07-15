@@ -1,3 +1,4 @@
+#include<linux/cdev.h>
 #include<linux/init.h>
 #include<linux/module.h>
 #include<linux/kernel.h>
@@ -8,7 +9,7 @@
 #include<linux/proc_fs.h>
 #include<linux/fcntl.h>
 #include<linux/sched.h>
-//#include<asm/current.h>
+#include<linux/fs.h>
 #include<linux/uaccess.h>
 
 int memory_major = 60;// driver main number
@@ -40,14 +41,20 @@ struct file_operations memory_fops = {
 	release: close
 };
 
+static dev_t d;
+struct cdev my_cdev;
 int init_module()
 {
-	return register_chrdev(memory_major, "memory", &memory_fops);
+	cdev_init(&my_cdev, &memory_fops);
+	alloc_chrdev_region(&d, 0, 1, "memory");
+	printk("major is %d, minor is %d", MAJOR(d), MINOR(d));
+	cdev_add(&my_cdev, d, 1);
+	return 0;
 }
 
 void cleanup_module()
 {
-	unregister_chrdev(memory_major, "memory");
+	unregister_chrdev_region(d, 1);
 }
 
 MODULE_LICENSE("GPL");
