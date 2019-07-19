@@ -36,10 +36,10 @@ ssize_t write(struct file *fp, const char* buf, size_t count, loff_t *f_pos) {
 }
 
 struct file_operations memory_fops = {
-	read: read,
-	write: write,
-	open: open,
-	release: close
+	.read = read,//C99 way of assigning to elements of a structure
+	.write = write,
+	.open = open,
+	.release = close
 };
 
 static dev_t d;
@@ -61,6 +61,7 @@ int init_module()
 void cleanup_module()
 {
 	unregister_chrdev_region(d, 1);
+	kfree(eep_class);
 }
 
 MODULE_LICENSE("GPL");
